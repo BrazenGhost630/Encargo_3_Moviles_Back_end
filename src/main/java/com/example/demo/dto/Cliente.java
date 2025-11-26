@@ -32,9 +32,6 @@ public class Cliente {
     @Column(name = "password", nullable = false)
     private String contrasenia;
 
-    @NotBlank(message = "Validar contraseña no puede estar vacia")
-    @Size(min = 8, message = "Contraseña debe tener como minimo 8 caracteres")
-    @Transient
-    private String validar_contrasenia;
+    
 
 }

@@ -23,14 +23,6 @@ public class ClienteService {
 
     
     public Cliente crear(Cliente c){
-        
-        if (!c.getContrasenia().equals(c.getValidar_contrasenia())) {
-            
-            throw new IllegalArgumentException("Las contraseñas no coinciden.");
-        }
-
-        
-
         return clienteRepository.save(c);
     }
 
