@@ -23,6 +23,19 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
+    public boolean authenticate(String email, String password) {
+    Optional<Cliente> clienteOpt = clienteRepository.findByEmail(email);
+
+    if (clienteOpt.isPresent()) {
+        Cliente cliente = clienteOpt.get();
+        // 💡 SIN ENCRIPTACIÓN: Comparamos las contraseñas en texto plano.
+        if (password.equals(cliente.getContrasenia())) {
+            return true; // Éxito: Solo devolvemos 'true'
+        }
+    }
+    return false; // Fallo
+}
+
     public boolean Login(String email, String password) {
 
      
@@ -41,23 +54,27 @@ public class ClienteService {
 
 
     
-    public Cliente register(String email, String password) {
-        // 1. Verificar si el usuario ya existe
-        if (clienteRepository.findByEmail(email).isPresent()) {
-            // Devuelve null o lanza una excepción para indicar que ya existe.
-            // Para simplicidad, devolveremos null.
-            return null;
-        }
-
-        // 2. Crear y guardar el nuevo usuario
-        Cliente nuevoUsuario = new Cliente();
-        nuevoUsuario.setEmail(email);
-        nuevoUsuario.setContrasenia(password); // Almacenado sin encriptar
-
-        return clienteRepository.save(nuevoUsuario);
+    public Cliente register(String email, String password, String nombre) {
+    // 1. Verificar si el usuario ya existe (lógica previa)
+    if (clienteRepository.findByEmail(email).isPresent()) {
+        // Devuelve null o lanza excepción si ya existe
+        return null;
     }
 
-    // Funcion que borra.
+    // 2. Crear y guardar el nuevo usuario
+    Cliente nuevoUsuario = new Cliente();
+    
+    // Asignamos el nombre recibido de la petición (del controlador)
+    // ✅ FIX PRINCIPAL
+    nuevoUsuario.setNombre(nombre); 
+    
+    nuevoUsuario.setEmail(email);
+    nuevoUsuario.setContrasenia(password); // Asumo que usas setContrasenia por tu entidad Cliente
+
+    return clienteRepository.save(nuevoUsuario);
+}
+
+    
     public void borrar(Long id){
         clienteRepository.deleteById(id);
     }
